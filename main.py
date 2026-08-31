@@ -31,12 +31,47 @@ WINDOW_BG=(20,98,58)
 FPS=60
 
 # Drawing text takes 3 stages:
-# Font definition -> Renfered text surface -> draw surface
+# Font definition >> Rendered text surface >> draw surface
 # onto screen
 
 # First, add a font size
+# Then create a font object
+# pygame.font.Font()
+# Purpose: creates a font object used to render text
+# First argument: the font file ("None" uses the built-in one)
+# Second arg.: The font size in pixels
+# Returns a font object
+# !!It does not draw or display text by itself!!
 
 FONT_SIZE=32
+font=pygame.font.Font(None,FONT_SIZE)
+
+# Add a text colour
+TEXT_COLOUR=(255,255,255)
+
+# font.render()
+# Method converts a Python string into a surface
+# Its arguments are:
+# 1. The string
+# 2. Antialiasing (True / False)
+# 3. The colour (TEXT_COLOUR)
+# 4. Background fill (omitted here)
+
+opening_text=font.render(
+    "Your alarm cuts through the silence...",
+    True,
+    TEXT_COLOUR
+)
+
+awake_text=font.render(
+    "Silencing the alarm, you climb out of bed and stretch...",
+    True,
+    TEXT_COLOUR
+)
+
+# create a variable to store the current text on-screen
+# starting with the first text. This is a "state".
+current_text=opening_text
 
 # Draw the main window and set the window title
 screen=pygame.display.set_mode(WINDOW_SIZE)
@@ -49,9 +84,37 @@ while True:
         if event.type==pygame.QUIT:
             pygame.quit()
             exit()
+        if event.type==pygame.KEYDOWN:
+            if event.key==pygame.K_z:
+                # print("Z was pressed")
+                current_text=awake_text
 
     # Fill in the background colour
     screen.fill(WINDOW_BG)
+
+    # screen.blit()
+    # "blit" means copying pixels from one surface onto another
+    # "screen" is the destination surface
+    # "opening_text" is the source surface
+    # (20,20) is the destination position
+    # The return value is a Rect describing the changed area which does not need to be
+    # stored at this time.
+    # The coordinate system of pygame uses X and Y, in pixels (increasing)
+    # Horizontal = X positive
+    # Vertical = Y positive
+    # from 0,0 in the top left corner
+    # Coordinates can also be negative, placing text outside of the screen area
+    
+    # screen.blit(opening_text,(20,20))
+    # change to state variable
+    screen.blit(current_text,(20,20))
+
+    # The drawing order matters
+    # 1. Fill background
+    # 2. Blit text onto the background
+    # 3. Update the display
+    # (ie. If you fill the background after adding the text, then the text will be
+    # overwritten with the background colour))
 
     # Update the display
     pygame.display.update()
