@@ -77,6 +77,12 @@ current_text=opening_text
 screen=pygame.display.set_mode(WINDOW_SIZE)
 pygame.display.set_caption("Mercurial Tangeant")
 
+def choose_text(event,current_surface,next_surface):
+    if event.type==pygame.KEYDOWN:
+        if event.key==pygame.K_z:
+            return next_surface
+    return current_surface
+
 # Main process loop
 while True:
     for event in pygame.event.get():
@@ -84,10 +90,7 @@ while True:
         if event.type==pygame.QUIT:
             pygame.quit()
             exit()
-        if event.type==pygame.KEYDOWN:
-            if event.key==pygame.K_z:
-                # print("Z was pressed")
-                current_text=awake_text
+        current_text=choose_text(event,current_text,awake_text)
 
     # Fill in the background colour
     screen.fill(WINDOW_BG)
